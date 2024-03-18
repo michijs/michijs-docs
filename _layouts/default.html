@@ -28,9 +28,11 @@
   <main>
 
     {% for page in site.pages %}
-    <li>
-      <a href="{{ page.url }}">{{ page.title }}</a>
-    </li>
+      {% if page.url contains "html" or page.url == "/" %}
+        <li>
+          <a href="{{ page.url }}">{{ page.title | default: "Latest" }}</a>
+        </li>
+      {% endif %}
     {% endfor %}
     {{ content }}
   </main>
