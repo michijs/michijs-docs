@@ -2,6 +2,10 @@ name: Update docs
 
 on:
   workflow_dispatch:
+    inputs:
+      next-branch-name:
+        description: "Next branch name"
+        default: "new-observers-v2"
 
 jobs:
   fetch_readmes:
@@ -40,6 +44,7 @@ jobs:
             wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
           fi
           done
+          wget -O Next.md https://raw.githubusercontent.com/michijs/michijs/${{ github.event.inputs.next-branch-name }}/README.md
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main
