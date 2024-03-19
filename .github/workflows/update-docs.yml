@@ -1,14 +1,10 @@
 name: Update docs
 
 on:
-  push:
-    branches: ["master"]
-  repository_dispatch:
-    types: [push]
   workflow_dispatch:
 
 jobs:
-  copy-readme:
+  fetch_readmes:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +18,29 @@ jobs:
       - name: Git configuration
         uses: michijs/.github/.github/actions/set-git-config-github-actions@main
 
-      - name: Import README.md file
-        shell: bash
-        run: wget -O README.md https://raw.githubusercontent.com/michijs/michijs/new-observers-v2/README.md
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Fetch npm Versions
+        id: fetch_versions
+        run: |
+          VERSIONS=$(npm show @michijs/michijs versions --json)
+          FILTERED_VERSIONS=$(echo "$VERSIONS" | jq 'map(select(. | test("beta|rc") | not))')
+          echo "::set-output name=versions::$FILTERED_VERSIONS"
+
+      - name: Retrieve READMEs
+        id: fetch_readmes
+        run: |
+          VERSIONS="${{ steps.fetch_versions.outputs.versions }}"
+          for version in $(echo "${VERSIONS}" | jq -r '.[]'); do
+            if [[ $version == $(echo "${VERSIONS}" | jq -r '.[-1]') ]]; then
+              wget -O README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+            else
+              wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+            fi
+          done
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main
