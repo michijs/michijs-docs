@@ -33,7 +33,7 @@
       {% endif %}
       {% if currentPage.url contains "html" %}
       <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>{{ currentPage.name
-        | remove: ".html" }}</option>
+        | remove: ".md" }}</option>
       {% endif %}
       {% endfor %}
     </select>
