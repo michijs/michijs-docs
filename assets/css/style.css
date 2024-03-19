@@ -11,6 +11,12 @@
   --variable-color: var(--accent);
 }
 
+select {
+  right: 0;
+  padding: 6px;
+  padding-right: 0;
+}
+
 aside {
   width: 240px;
   position: sticky;
