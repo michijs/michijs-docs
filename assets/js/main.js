@@ -1,4 +1,4 @@
-const aside = document.getElementsByName("aside").item(0);
+const aside = document.createElement('aside');
 const ol = document.createElement("ol");
 aside.appendChild(ol);
 
