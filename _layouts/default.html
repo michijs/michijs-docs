@@ -26,14 +26,18 @@
 
 <body>
   <main>
-
-    {% for page in site.pages %}
-      {% if page.url contains "html" or page.url == "/" %}
-        <li>
-          <a href="{{ page.url }}">{{ page.title | default: "Latest" }}</a>
-        </li>
+    <select onchange="location.href = this.value">
+      {% for currentPage in site.pages %}
+      {% if currentPage.url == "/" %}
+      <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>Latest</option>
       {% endif %}
-    {% endfor %}
+      {% if currentPage.url contains "html" %}
+      <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>{{ currentPage.name
+        | remove: ".html" }}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+
     {{ content }}
   </main>
 </body>
