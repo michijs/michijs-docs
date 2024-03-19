@@ -27,7 +27,7 @@ jobs:
         id: fetch_versions
         run: |
           VERSIONS=$(npm show @michijs/michijs versions --json)
-          FILTERED_VERSIONS=$(echo "$VERSIONS" | jq 'map(select(. | test("beta|rc") | not))')
+          FILTERED_VERSIONS=$(echo "$VERSIONS" | jq -r 'map(select(. | test("beta|rc") | not)) | join(" ")')
           echo "VERSIONS=$FILTERED_VERSIONS" >> $GITHUB_ENV
 
       - name: Retrieve READMEs
