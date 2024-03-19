@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 20
 
       - name: Fetch npm Versions
         id: fetch_versions
@@ -33,13 +33,12 @@ jobs:
       - name: Retrieve READMEs
         id: fetch_readmes
         run: |
-          VERSIONS="${{ env.VERSIONS }}"
-          for version in $(echo "${VERSIONS}" | jq -r '.[]'); do
-            if [[ $version == $(echo "$VERSIONS" | awk '{print $NF}') ]]; then
-              wget -O README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
-            else
-              wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
-            fi
+          for version in $VERSIONS; do
+          if [[ $version == $(echo "$VERSIONS" | awk '{print $NF}') ]]; then
+            wget -O README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+          else
+            wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+          fi
           done
 
       - name: Commit changes
