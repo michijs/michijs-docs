@@ -20,24 +20,28 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
-  {% seo %}
   <title>{{ page.title }}</title>
 </head>
 
 <body>
-  <main>
+  <header>
     <select onchange="location.href = this.value">
       {% for currentPage in site.pages %}
       {% if currentPage.url == "/" %}
       <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>Latest</option>
       {% endif %}
       {% if currentPage.url contains "html" %}
-      <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>{{ currentPage.name
+      <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>{{
+        currentPage.name
         | remove: ".md" }}</option>
       {% endif %}
       {% endfor %}
     </select>
-
+    <a href="https://github.com/michijs/michijs">
+      <button type="button">GitHub repository</button>
+    </a>
+  </header>
+  <main>
     {{ content }}
   </main>
 </body>

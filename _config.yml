@@ -1,3 +1,9 @@
-markdown: GFM
 title: MichiJS
+markdown: GFM
 description: A Vainilla Library for Web Components
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+    values:
+      layout: "default"

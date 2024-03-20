@@ -9,6 +9,10 @@ document.querySelectorAll("[id]").forEach((x) => {
     const a = document.createElement("a");
     li.appendChild(a);
     a.href = `#${x.id}`;
+    const linkClone = a.cloneNode(true);
+    linkClone.textContent = x.textContent;
+    x.textContent = '';
+    x.append(linkClone)
     if (x.tagName === "H3") a.textContent = x.textContent;
     else {
       const strong = document.createElement("strong");
@@ -18,4 +22,4 @@ document.querySelectorAll("[id]").forEach((x) => {
   }
 });
 
-document.body.prepend(aside);
+document.getElementsByTagName('header')[0].after(aside);
