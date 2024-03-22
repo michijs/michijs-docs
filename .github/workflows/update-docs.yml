@@ -3,15 +3,7 @@ name: Update docs
 on:
   repository_dispatch:
     types: [push]
-    inputs:
-      next-branch-name:
-        description: "Next branch name"
-        default: "new-observers-v2"
   workflow_dispatch:
-    inputs:
-      next-branch-name:
-        description: "Next branch name"
-        default: "new-observers-v2"
 
 jobs:
   fetch_readmes:
@@ -47,10 +39,12 @@ jobs:
           if [[ $version == $(echo "$VERSIONS" | awk '{print $NF}') ]]; then
             wget -O README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
           else
-            wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+            if [ ! -f "v$version.md" ]; then
+              wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+            fi
           fi
           done
-          wget -O Next.md https://raw.githubusercontent.com/michijs/michijs/${{ github.event.inputs.next-branch-name }}/README.md
+          wget -O Next.md https://raw.githubusercontent.com/michijs/michijs/new-observers-v2/README.md
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main
