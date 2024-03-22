@@ -1,6 +1,8 @@
 name: Update docs
 
 on:
+  repository_dispatch:
+    types: [push]
   workflow_dispatch:
     inputs:
       next-branch-name:
