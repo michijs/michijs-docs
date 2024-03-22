@@ -3,6 +3,10 @@ name: Update docs
 on:
   repository_dispatch:
     types: [push]
+    inputs:
+      next-branch-name:
+        description: "Next branch name"
+        default: "new-observers-v2"
   workflow_dispatch:
     inputs:
       next-branch-name:
