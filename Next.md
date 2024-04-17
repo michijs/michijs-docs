@@ -425,6 +425,9 @@ Allows for observing changes in an object and synchronizing it with the browser'
 - item: The object to be observed and synchronized with storage.
 - storage: The storage object to be used (defaults to localStorage if not provided)
 
+> [!TIP]
+> If you want to use cookies we provide a class that acts like an storage called CookieStorage
+
 #### useIndexedDB
 It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
 - name Specifies the name of the IndexedDB database to be used or created.
@@ -465,6 +468,57 @@ export const counterStyle = css`
       text-align: center;
   }
 `
+```
+
+#### useAnimation
+Generates CSS keyframes and animation properties based on the provided keyframes and options.
+```tsx
+const hiddenState = {
+  opacity: 0,
+} satisfies CSSProperties;
+const shownState = {
+  opacity: 1,
+} satisfies CSSProperties;
+
+const [hideKeyframe, hideProperties] = useAnimation([shownState, hiddenState], {
+  duration: '2s',
+  fill: 'forwards'
+});
+const [showKeyframe, showProperties] = useAnimation([hiddenState, shownState], {
+  duration: '1s',
+  fill: 'forwards'
+});
+
+export const dialogStyle = useStyleSheet((tag) => ({
+  ...showKeyframe,
+  ...hideKeyframe,
+  [tag]: {
+    ...hideProperties,
+    display: 'flex',
+    flexDirection: 'row',
+    '[open]': showProperties
+  },
+}));
+```
+#### useTransition
+Hook to generate CSS transition properties based on the provided configuration.
+```tsx
+const opacityTransition = useTransition({
+  property: ["opacity"],
+  duration: "1s",
+});
+
+export const dialogStyle = useStyleSheet((tag) => ({
+  [tag]: {
+    ...opacityTransition,
+    display: 'flex',
+    flexDirection: 'row',
+    opacity: 0,
+    '[open]': {
+      opacity: 1
+    }
+  },
+}));
 ```
 
 #### CSS module scripts
