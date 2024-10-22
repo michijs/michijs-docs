@@ -56,7 +56,7 @@ jobs:
             fi
           fi
           done
-          wget -O Next.md https://raw.githubusercontent.com/michijs/michijs/new-observers-v2/README.md
+          wget -O Next.md https://raw.githubusercontent.com/michijs/michijs/master/README.md
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main
