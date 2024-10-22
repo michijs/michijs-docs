@@ -27,7 +27,7 @@
 <body>
   <header>
     <select onchange="location.href = this.value">
-      {% for currentPage in site.pages %}
+      {% for currentPage in site.pages reversed %}
       {% if currentPage.url == "/" %}
       <option value="{{ currentPage.url }}" {% if page.url==currentPage.url %} selected {% endif %}>Latest</option>
       {% endif %}
