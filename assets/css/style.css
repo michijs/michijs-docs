@@ -17,6 +17,7 @@ html {
   display: flex;
   justify-content: center;
   max-width: 100%;
+  accent-color: var(--dark-accent);
 }
 
 select, button {
