@@ -18,26 +18,37 @@
 |  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
 |--|--|--|--|--|--|
 | Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Dynamic Constructable Stylesheets support | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
 | Prefer Javascript templates over compiled plain text | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ |
 | [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
 | Does not require extensions to be identified by the IDE | ✅ | ✅ | ✅ | ❌ | ✅ |
 | [Differentiation between attributes and properties in jsx / templates](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Standard Web Components | ✅ |  ⭕ | ✅ | ⭕ | ✅ |
-| Observables / stores support | ✅ | ⭕ | ⭕ | ⭕ | ❌ |
+| Standard Web Components | ✅ |  ⭕ <sup>1</sup> | ✅ | ✅ | ✅ |
+| Observables / stores support | ✅ | ⭕ <sup>2</sup> | ⭕ <sup>2</sup> | ⭕ <sup>2</sup> | ❌ |
 | [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |❌ |
-| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕ |
+| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕<sup>2</sup> |
 | Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
 | Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
-| Without polyfills | ✅ | ✅ | ❌ | ❌ | ✅ |
-| Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ | ✅ |
+| Attributes / Native events support | ✅ | ❌ <sup>3</sup> | ⭕<sup>4</sup> | ✅ | ✅ |
 | Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
 | Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕ | ✅ |
+| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕<sup>5</sup> | ✅ |
 | ✅ = implemented
 | ⭕ = partially implemented
 | ❌ = not implemented
+
+<details>
+  <summary>More details</summary>
+  <ol>
+    <li>React does not support web elements until version 19</li>
+    <li>Only with separated / external packages - Not an unique-state-first approach</li>
+    <li>React only supports properties and synthetic events</li>
+    <li>StencilJS only supports properties</li>
+    <li>Svelte components can be shared only using custom elements</li>
+  </ol>
+</details>
 
 ## Getting Started
 
@@ -145,9 +156,9 @@ A component consists of the following properties:
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
-      <td rowspan="14">lifecycle</td>
+      <td rowspan="15">lifecycle</td>
       <tr>
-        <td rowspan="8">Custom Element related</td>
+        <td rowspan="9">Custom Element related</td>
         <tr>
           <td>willConstruct</td>
           <td>This method is called at the start of constructor.</td>
@@ -171,6 +182,10 @@ A component consists of the following properties:
         <tr>
           <td>willReceiveAttribute</td>
           <td>This method is called before a component does anything with an attribute.</td>
+        </tr>
+        <tr>
+          <td>disconnected</td>
+          <td>This method is called when a component is disconnected from the DOM.</td>
         </tr>
         <tr>
           <td>didUnmount</td>
@@ -238,6 +253,26 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
+### Component lifecycle
+```mermaid
+stateDiagram-v2
+    [*] --> willConstruct
+    willConstruct --> didConstruct
+    didConstruct --> connected
+    connected --> willMount: Only the first time
+    willMount --> didMount
+    didMount --> disconnected
+    disconnected --> didUnmount
+    didUnmount --> [*]
+    disconnected --> connected: If element was moved
+    connected --> disconnected
+    didUnmount --> connected: If the element was in caché
+
+    willConstruct --> formAssociated: Only if formAssociated
+    formAssociated --> didConstruct
+```
+
+Callbacks can be called at almost any point of the lifecycle
 
 ## How this works?
 ### The problem with stores - the traditional approach
@@ -252,16 +287,19 @@ graph TD;
     Store --> D["Component D"];
     Store --> E["Component E"];
     Store --> F["Component F"];
+    F --> H["Component H"];
+    F --> I["Component I"];
     Store --> G["Component G"];
 ```
-This approach brings two major issues:
+This approach brings three major issues:
 - Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
-- There is now way to set static properties in a dinamic environment. Take this React example:
+- Any update on a component will trigger an update on the children. Which might be unnecesary.
+- There is now way to set static properties in a dynamic environment. Take this React example:
 ```tsx
 const [value, setValue] = useState(0);
 <input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
 ```
-In this example value is updated every time input changes; which, by definition, is wrong. Why? Because value *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
+In this example value is updated every time input changes; which, by definition, is wrong. Why? Because "value" *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
 
 With Michijs the solution is:
 ```tsx
@@ -281,7 +319,7 @@ sequenceDiagram
     end
     Subscriber->>Proxy: Subscribes to
     Environment->>Proxy: Request to change a value
-    Proxy-->>Value: Value is diferent?
+    Proxy-->>Value: Value is different?
     Value-->>Value: Yes! Update
     Value-->>Proxy: Sends a clone of the value
     Proxy->>Subscriber: Notifies with a signal (new value)
@@ -301,7 +339,7 @@ graph TD;
     B --> F["Another observable F"];
     C --> G["Text node G"];
 ```
-When a node is garbage collected in the next update will be unsubscribed.
+When a node is garbage collected, it will be unsubscribed in the next update.
 
 ### Rendering - Static vs dynamic
 Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, __we render the component only once and the changes are managed through the observables__.
@@ -328,11 +366,11 @@ createCustomElement("test-component", {
         <button onpointerup={this.incrementValueB}>Increment B</button>
         {/* Renders 0, but is static */}
         <span>{this.valueA()}</span>
-        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        {/* Renders 1, but is dynamic and will change when clicking on the button */}
         <span>{this.valueB}</span>
         {/* Renders 1, but is static */}
         <span>{this.valueA() + this.valueB()}</span>
-        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        {/* Renders 1, but is dynamic and will change when clicking on the button */}
         <span>{sum}</span>
       </>
     );
@@ -380,6 +418,10 @@ Responsible for observing changes on different types of values. Takes two argume
 - item: The value to be observed.
 - initialObservers: An array of initial observers of type Subscription<T>.
 This is the most basic hook and it is the basis of the entire component structure.
+
+If the item contains a function. It will return an observable that observes for changes in the object itself. 
+
+**A function in an observable should never mutate the observable.**
 
 #### usePureFunction
 It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
@@ -568,6 +610,13 @@ It allows to:
 ### AsyncComponent
 Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
 
+### Slot
+Checks if the context element has a shadow root and renders either a standard <slot> or a MichiSlot custom element, passing along attributes and children.
+
+When nodes are added, it checks if they have a slot attribute matching the slot's name or if no name is set, appending them to the MichiSlot and triggering a slotchange event. 
+
+The main difference between the standard slot aned the MichiSlot is that the parent does not have a shadow DOM so **every** child appended to the parent is moved to the slot.
+
 ## Custom element methods
 ### child
 Allows to get a child element from the host with the selector
@@ -729,19 +778,30 @@ export default AsyncChildExample
 ```
 
 ## I18n
-It is supported by using a custom store
+It is supported using observables. By default, the desired languages are taken from the browser. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language (the first one in the list). The default language cannot be obtained asynchronously.
 ```tsx
-const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
+
+const { lang } = useStorage({
+  lang: navigator.language,
+});
+
+const translator = new I18n(["en-uk", "es"], lang);
 
 const t = translator.createTranslation({
-  es: () => import('./translations/es.json'),
-  en
+  "en-uk": {
+    dogBit: "The dog bit its owner",
+    birthDay: (date: Date) => `My birthday is ${date.toLocaleDateString('en-uk')}`,
+  },
+  es: () => import("./translations/es.json"),
 });
 
 export const MyComponent = createCustomElement('my-component', {
   render() {
     return (
-      <span>{t.hello}</span>
+      <>
+        <p>{t.dogBit}</p>
+        <p>{t.birthDay(new Date(1997, 20, 2))}</p>
+      </>
     );
   }
 });
@@ -772,20 +832,14 @@ If you REALLY need polyfills i recommend you to read this topics:
 - https://www.webcomponents.org/polyfills
 - https://ungap.github.io
 
+### Built-in elements in Safari
+We provide partial support for Safari's built-in elements by emulating their behavior with a custom element, michi-generic-element. This is necessary to manage the element's lifecycle and support adoptedStyleSheets.
+
 ## Browser Support
-
-### Customized built-in elements
-- https://www.chromestatus.com/feature/4670146924773376
-
-### Autonomous custom elements
-- https://www.chromestatus.com/feature/4696261944934400
-- https://www.webcomponents.org/
-
-### Compatibility with frameworks
-- https://custom-elements-everywhere.com
-
-### Element internals
-- https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
+- **Customized built-in elements**: [Chrome feature status](https://www.chromestatus.com/feature/4670146924773376)
+- **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) | [WebComponents.org](https://www.webcomponents.org/)
+- **Framework Compatibility**: [Custom Elements Everywhere](https://custom-elements-everywhere.com)
+- **Element internals**: [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals)
 
 ## Supporting MichiJS
 ### Sponsors
