@@ -192,6 +192,7 @@ body {
     }
 
     blockquote {
+      margin: 0;
       color: #aaa;
       padding-left: 10px;
       border-left: 1px dotted #666;
