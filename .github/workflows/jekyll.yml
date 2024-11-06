@@ -47,14 +47,14 @@ jobs:
         run: |
           for version in $VERSIONS; do
           if [[ $version == $(echo "$VERSIONS" | awk '{print $NF}') ]]; then
-            wget -O README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+            wget -O jekyll-src/README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
           else
             if [ ! -f "v$version.md" ]; then
-              wget -O v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+              wget -O jekyll-src/v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
             fi
           fi
           done
-          wget -O Next.md https://raw.githubusercontent.com/michijs/michijs/master/README.md
+          wget -O jekyll-src/Next.md https://raw.githubusercontent.com/michijs/michijs/master/README.md
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main

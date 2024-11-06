@@ -1,0 +1,11 @@
+{
+    "extends": "@michijs/tsconfig/tsconfig.json",
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "build"
+    ]
+  }

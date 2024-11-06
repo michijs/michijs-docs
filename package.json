@@ -1,0 +1,31 @@
+{
+    "name": "@michijs/michijs-docs",
+    "license": "MIT",
+    "version": "0.0.1",
+    "packageManager": "bun@1.1.20",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/michijs/michijs-docs.git"
+    },
+    "description": "Docs for MichiJS library",
+    "scripts": {
+      "start": "michi-server --start",
+      "dist": "michi-server --dist",
+      "build": "michi-server --build",
+      "publish-npm": "npm run dist && npm publish --access public",
+      "generate-icons": "michi-server --generate-assets",
+      "test-tsc": "michi-server --test-tsc"
+    },
+    "keywords": [
+      "web-components",
+      "michijs"
+    ],
+    "devDependencies": {
+      "@michijs/tsconfig": "0.0.4",
+      "@michijs/dev-server": "0.7.22",
+      "typescript": "5.6.3"
+    },
+    "dependencies": {
+      "mermaid": "11.4.0"
+    }
+  }
