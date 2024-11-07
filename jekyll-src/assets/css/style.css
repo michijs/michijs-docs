@@ -146,7 +146,7 @@ body {
     width: 100%;
     max-width: min(1000px, 100%);
 
-    a {
+    a:not(:has(img)) {
       color: var(--accent);
     }
 
