@@ -1,0 +1,10 @@
+{
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+      "README.md": "*.md",
+      "Gemfile": "Gemfile.lock, _config.yml",
+      "package.json": "bun.lockb, .gitignore, tsconfig.json, rome.json, dist.tsconfig.json, LICENSE.md, package-lock.json, jest-puppeteer.config.js, michi.config.ts",
+      "*.tsx": "$(capture).css, $(capture).css.ts, $(capture).html, $(capture).spec.ts, $(capture).spec.tsx, $(capture).stories.tsx, types.ts, constants.ts",
+    }
+  }
