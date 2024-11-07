@@ -6,4 +6,4 @@ defaults:
     values:
       layout: "default"
       render_with_liquid: false # Avoids using liquid inside pages - only works on jekyll > 4
-exclude: ["src"]
+source: "jekyll-src"

@@ -80,8 +80,7 @@ jobs:
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./
-          destination: ./_site
+          source: ./jekyll-src
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

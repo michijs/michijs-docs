@@ -2,6 +2,15 @@
   font-family: 'Fira Code';
   src: url('FiraCode-VF.ttf') format('truetype');
 }  
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: italic;
+  src: url('NotoSans-Italic-VariableFont_wdth.ttf') format('truetype');
+}  
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('NotoSans-VariableFont_wdth.ttf') format('truetype');
+}  
 
 :root {
   scroll-behavior: smooth;
@@ -204,6 +213,7 @@ body {
     }
 
     pre {
+      text-align: center;
       background: rgba(0, 0, 0, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 10px;
