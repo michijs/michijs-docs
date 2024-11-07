@@ -1,29 +1,29 @@
 @font-face {
-  font-family: 'Fira Code';
-  src: url('FiraCode-VF.ttf') format('truetype');
-}  
+  font-family: "Fira Code";
+  src: url("FiraCode-VF.ttf") format("truetype");
+}
 @font-face {
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   font-style: italic;
-  src: url('NotoSans-Italic-VariableFont_wdth.ttf') format('truetype');
-}  
+  src: url("NotoSans-Italic-VariableFont_wdth.ttf") format("truetype");
+}
 @font-face {
-  font-family: 'Noto Sans';
-  src: url('NotoSans-VariableFont_wdth.ttf') format('truetype');
-}  
+  font-family: "Noto Sans";
+  src: url("NotoSans-VariableFont_wdth.ttf") format("truetype");
+}
 
 :root {
   scroll-behavior: smooth;
-  --text-color: #D4D4D4;
-  --background-color: #0D1117;
-  --error-text-color: #F44747;
+  --text-color: #d4d4d4;
+  --background-color: #0d1117;
+  --error-text-color: #f44747;
   --error-background-color: #ac4142;
-  --comment-color: #6A9955;
-  --accent: #EBBF4AD0;
+  --comment-color: #6a9955;
+  --accent: #ebbf4ad0;
   --dark-accent: #ebc04a6e;
   --keyword-color: var(--accent);
-  --string-color: #CE9178;
-  --number-color: #B5CEA8;
+  --string-color: #ce9178;
+  --number-color: #b5cea8;
   --variable-color: var(--accent);
 }
 
@@ -34,7 +34,8 @@ html {
   accent-color: var(--dark-accent);
 }
 
-select, button {
+select,
+button {
   padding: 6px;
 }
 
@@ -59,7 +60,7 @@ aside {
       background-color: var(--dark-accent);
     }
 
-    padding-left: 5px
+    padding-left: 5px;
   }
 
   ol {
@@ -70,7 +71,7 @@ aside {
 
   li:not(:has(strong)) {
     a {
-      padding-left: 15px
+      padding-left: 15px;
     }
   }
 
@@ -88,7 +89,8 @@ header {
   gap: 5px;
 }
 
-img, table {
+img,
+table {
   max-width: 100%;
 }
 
@@ -107,7 +109,8 @@ code {
   font-optical-sizing: auto;
 }
 
-td, th {
+td,
+th {
   padding: 6px 13px;
   border: 1px solid #30363d;
 }
@@ -134,8 +137,9 @@ body {
   font-size: 16px;
   line-height: 1.5;
   font-optical-sizing: auto;
-  font-variation-settings: "wdth"100;
-  font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-variation-settings: "wdth" 100;
+  font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
   main {
     word-wrap: break-word;
@@ -143,7 +147,7 @@ body {
     max-width: min(1000px, 100%);
 
     a {
-      color: var(--accent)
+      color: var(--accent);
     }
 
     h1,
@@ -202,7 +206,7 @@ body {
     }
 
     li::marker {
-      content: "> "
+      content: "> ";
     }
 
     blockquote {

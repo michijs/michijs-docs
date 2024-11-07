@@ -1,5 +1,5 @@
 import mermaid from "mermaid";
-const aside = document.createElement('aside');
+const aside = document.createElement("aside");
 const ol = document.createElement("ol");
 aside.appendChild(ol);
 
@@ -18,23 +18,23 @@ document.querySelectorAll("[id]").forEach((x) => {
       linkClone.append(strong);
       strong.textContent = x.textContent;
     }
-    x.textContent = '';
-    x.append(linkClone.cloneNode(true))
-    ol.append(liClone)
+    x.textContent = "";
+    x.append(linkClone.cloneNode(true));
+    ol.append(liClone);
   }
 });
 
-document.getElementsByTagName('header')[0].after(aside);
+document.getElementsByTagName("header")[0].after(aside);
 
 // Mermaid config
 mermaid.initialize({
-    startOnLoad: false,
-    theme: "dark",
-    flowchart: {
-      useMaxWidth: false,
-      htmlLabels: true,
-    },
-  });
+  startOnLoad: false,
+  theme: "dark",
+  flowchart: {
+    useMaxWidth: false,
+    htmlLabels: true,
+  },
+});
 await mermaid.run({
   querySelector: ".language-mermaid",
 });
