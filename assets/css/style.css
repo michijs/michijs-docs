@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Fira Code';
+  src: url('FiraCode-VF.ttf') format('truetype');
+}  
+
 :root {
   scroll-behavior: smooth;
   --text-color: #D4D4D4;

@@ -1,13 +1,14 @@
 Gemfile.lock
 _site
 .jekyll-cache
+.bundle
 
 dist/
 !www/favicon.ico
 www/
 build/
 bun.lockb
-jekyll-src/assets/js
+assets/js
 
 *~
 *.sw[mnpcod]

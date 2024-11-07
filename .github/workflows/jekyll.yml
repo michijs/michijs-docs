@@ -25,20 +25,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+
+      - name: Set up environment
+        uses: michijs/.github/.github/actions/setup@main
+
+      - name: Install dependencies
+        uses: michijs/.github/.github/actions/install@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Git configuration
         uses: michijs/.github/.github/actions/set-git-config-github-actions@main
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-
       - name: Fetch npm Versions
         id: fetch_versions
         run: |
-          VERSIONS=$(npm show @michijs/michijs versions --json)
+          VERSIONS=$(bunx npm show @michijs/michijs versions --json)
           FILTERED_VERSIONS=$(echo "$VERSIONS" | jq -r 'map(select(. | test("beta|rc") | not)) | join(" ")')
           echo "VERSIONS=$FILTERED_VERSIONS" >> $GITHUB_ENV
 
@@ -65,6 +68,11 @@ jobs:
         uses: michijs/.github/.github/actions/pull-and-push@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        uses: michijs/.github/.github/actions/run@main
+        with:
+          command: build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
