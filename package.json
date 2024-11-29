@@ -12,7 +12,6 @@
       "start": "michi-server --start",
       "dist": "michi-server --dist",
       "build": "michi-server --build",
-      "publish-npm": "npm run dist && npm publish --access public",
       "generate-icons": "michi-server --generate-assets",
       "test-tsc": "michi-server --test-tsc"
     },
@@ -22,10 +21,10 @@
     ],
     "devDependencies": {
       "@michijs/tsconfig": "0.0.4",
-      "@michijs/dev-server": "0.7.24",
+      "@michijs/dev-server": "0.7.25",
       "typescript": "5.7.2"
     },
     "dependencies": {
-      "mermaid": "11.4.0"
+      "mermaid": "11.4.1"
     }
   }
