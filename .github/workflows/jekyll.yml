@@ -45,10 +45,14 @@ jobs:
           FILTERED_VERSIONS=$(echo "$VERSIONS" | jq -r 'map(select(. | test("beta|rc") | not)) | join(" ")')
           echo "VERSIONS=$FILTERED_VERSIONS" >> $GITHUB_ENV
 
-      - name: Retrieve unique READMEs
+      - name: Clean and retrieve unique READMEs
         id: fetch_readmes
         run: |
           mkdir -p jekyll-src/tmp
+      
+          # Remove old versioned README files
+          find jekyll-src -maxdepth 1 -type f -name 'v*.md' -exec rm -f {} +
+      
           unique_hashes=()
       
           for version in $VERSIONS; do
@@ -72,10 +76,11 @@ jobs:
             fi
           done
       
-          # Always download the master (Next) version
+          # Download the master branch README as Next.md
           wget -q -O jekyll-src/Next.md https://raw.githubusercontent.com/michijs/michijs/master/README.md
       
           rm -r jekyll-src/tmp
+
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main
