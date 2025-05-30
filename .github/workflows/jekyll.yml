@@ -45,19 +45,37 @@ jobs:
           FILTERED_VERSIONS=$(echo "$VERSIONS" | jq -r 'map(select(. | test("beta|rc") | not)) | join(" ")')
           echo "VERSIONS=$FILTERED_VERSIONS" >> $GITHUB_ENV
 
-      - name: Retrieve READMEs
+      - name: Retrieve unique READMEs
         id: fetch_readmes
         run: |
+          mkdir -p jekyll-src/tmp
+          unique_hashes=()
+      
           for version in $VERSIONS; do
-          if [[ $version == $(echo "$VERSIONS" | awk '{print $NF}') ]]; then
-            wget -O jekyll-src/README.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
-          else
-            if [ ! -f "v$version.md" ]; then
-              wget -O jekyll-src/v$version.md https://raw.githubusercontent.com/michijs/michijs/v$version/README.md
+            url="https://raw.githubusercontent.com/michijs/michijs/v$version/README.md"
+            tmp_file="jekyll-src/tmp/v$version.md"
+            wget -q -O "$tmp_file" "$url"
+      
+            hash=$(sha256sum "$tmp_file" | awk '{print $1}')
+            is_unique=true
+      
+            for existing_hash in "${unique_hashes[@]}"; do
+              if [[ "$hash" == "$existing_hash" ]]; then
+                is_unique=false
+                break
+              fi
+            done
+      
+            if $is_unique; then
+              unique_hashes+=("$hash")
+              cp "$tmp_file" "jekyll-src/v$version.md"
             fi
-          fi
           done
-          wget -O jekyll-src/Next.md https://raw.githubusercontent.com/michijs/michijs/master/README.md
+      
+          # Always download the master (Next) version
+          wget -q -O jekyll-src/Next.md https://raw.githubusercontent.com/michijs/michijs/master/README.md
+      
+          rm -r jekyll-src/tmp
 
       - name: Commit changes
         uses: michijs/.github/.github/actions/commit-if-changes@main
