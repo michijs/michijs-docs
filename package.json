@@ -25,6 +25,6 @@
       "typescript": "5.8.3"
     },
     "dependencies": {
-      "mermaid": "11.6.0"
+      "mermaid": "11.7.0"
     }
   }
