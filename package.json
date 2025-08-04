@@ -22,7 +22,7 @@
     "devDependencies": {
       "@michijs/tsconfig": "0.0.5",
       "@michijs/dev-server": "0.8.7",
-      "typescript": "5.8.3"
+      "typescript": "5.9.2"
     },
     "dependencies": {
       "mermaid": "11.9.0"
