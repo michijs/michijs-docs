@@ -2,7 +2,7 @@
     "name": "@michijs/michijs-docs",
     "license": "MIT",
     "version": "0.0.1",
-    "packageManager": "bun@1.1.20",
+    "packageManager": "bun@1.2.20",
     "repository": {
       "type": "git",
       "url": "https://github.com/michijs/michijs-docs.git"
@@ -22,7 +22,7 @@
     "devDependencies": {
       "@michijs/tsconfig": "0.0.5",
       "@michijs/dev-server": "0.8.7",
-      "typescript": "5.8.3"
+      "typescript": "5.9.2"
     },
     "dependencies": {
       "mermaid": "11.9.0"
