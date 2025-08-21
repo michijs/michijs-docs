@@ -25,18 +25,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup credentials
+        uses: michijs/.github/.github/actions/setup-credentials@main
+        with:
+          michijs_bot_app_id: ${{ vars.MICHIJS_BOT_APP_ID }}
+          michijs_bot_private_key: ${{ secrets.MICHIJS_BOT_PRIVATE_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up environment
         uses: michijs/.github/.github/actions/setup@main
 
       - name: Install dependencies
         uses: michijs/.github/.github/actions/install@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Git configuration
-        uses: michijs/.github/.github/actions/set-git-config-github-actions@main
 
       - name: Fetch npm Versions
         id: fetch_versions
@@ -89,8 +91,6 @@ jobs:
 
       - name: Push changes
         uses: michijs/.github/.github/actions/pull-and-push@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         uses: michijs/.github/.github/actions/run@main
@@ -118,4 +118,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4.0.5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ env.GITHUB_TOKEN }}
